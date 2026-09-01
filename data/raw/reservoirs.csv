@@ -1,0 +1,9 @@
+reservoir_id,zone_id,reservoir_name,capacity_ml,commissioned_year
+R01,Z01,Riverside North Reservoir,6440.5,1999
+R02,Z02,Old Town Central Reservoir,8686.3,1989
+R03,Z03,Greenfield Suburbs Reservoir,4573.0,1979
+R04,Z04,Industrial Belt East Reservoir,1898.2,1974
+R05,Z05,Lakeside Heights Reservoir,3678.5,2002
+R06,Z06,Downtown Business Reservoir,1681.5,2005
+R07,Z07,Harborview Reservoir,3479.6,1992
+R08,Z08,Hillcrest Reservoir,3245.2,1986

@@ -1,0 +1,9 @@
+zone_id,zone_name,zone_type,population,num_households,area_sq_km
+Z01,Riverside North,Residential,48000,14200,6.1
+Z02,Old Town Central,Mixed,62000,17800,4.3
+Z03,Greenfield Suburbs,Residential,35500,10600,9.8
+Z04,Industrial Belt East,Industrial,12800,2100,7.4
+Z05,Lakeside Heights,Residential,27600,8300,5.5
+Z06,Downtown Business,Commercial,18900,4100,2.9
+Z07,Harborview,Mixed,31200,9700,5.0
+Z08,Hillcrest,Residential,22400,6900,6.7
