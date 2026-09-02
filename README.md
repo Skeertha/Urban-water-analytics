@@ -106,3 +106,28 @@ deployment would need.
 ## License
 
 MIT — free to use, adapt, and extend for your own portfolio or coursework.
+
+## SQL Analysis
+
+MySQL was used to perform business-focused analysis on citywide water and zone-level datasets.
+
+Key SQL analysis includes:
+
+- Overall production, billing, and NRW KPI analysis
+- Daily and monthly NRW trend analysis
+- Production-to-bill gap analysis
+- Zone-level leakage analysis
+- Revenue-at-risk analysis
+- Risk classification using CASE WHEN
+- JOIN analysis between leakage and revenue-risk datasets
+- CTE-based zone analysis
+- Window functions using RANK()
+
+### Key SQL Insights
+
+- November 2023 was identified as the strongest NRW anomaly period, with an average NRW of approximately 13.85%.
+- All 17 days classified as high NRW (NRW >= 14%) occurred in November 2023.
+- July 2025 recorded the highest monthly production-to-bill gap at 224.69.
+- Zone-level SQL analysis combines leakage indicators with revenue-risk data to support operational prioritization.
+
+The complete SQL analysis is available in `SQL/urban_water_analysis.sql`.
