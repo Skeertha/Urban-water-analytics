@@ -1,0 +1,4 @@
+model,test_days,MAE_percentage_points,RMSE_percentage_points
+Previous-day baseline,214,0.09879321369465233,0.33716599171677225
+Linear Regression,214,0.11858327855718852,0.32747295474216664
+Random Forest,214,0.15829068024818818,0.3973560036668286

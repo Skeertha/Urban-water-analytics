@@ -162,3 +162,20 @@ Run the automated tests:
 ```powershell
 python -m unittest discover -s tests -p "test*.py" -v
 ```
+## NRW hypothesis analysis and forecasting
+
+### High-NRW episode
+
+Using 14% as a descriptive threshold, 17 high-NRW days occurred consecutively from 12–28 November 2023. Average NRW during this episode was 15.691%, compared with 11.351% on the other 1,079 days (difference: 4.339 percentage points). This indicates a concentrated episode, but does not establish its cause or formal statistical significance.
+
+### Forecast model evaluation
+
+The final 214 days (1 June–31 December 2025) were held out for chronological evaluation.
+
+| Model | MAE (percentage points) | RMSE (percentage points) |
+|---|---:|---:|
+| Previous-day baseline | 0.0988 | 0.3372 |
+| Linear Regression | 0.1186 | 0.3275 |
+| Random Forest | 0.1583 | 0.3974 |
+
+The previous-day baseline had the lowest MAE, while Linear Regression had the lowest RMSE. Machine learning did not beat the baseline on MAE. The chart can be reproduced by running `python python\07_plot_nrw_forecast.py` after `results/nrw_forecast_predictions.csv` exists.

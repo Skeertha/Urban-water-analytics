@@ -1,0 +1,105 @@
+{
+  "consumption_daily": {
+    "row_count": 8768,
+    "column_count": 6,
+    "missing_cells": 0,
+    "duplicate_rows": 0,
+    "columns": [
+      "date",
+      "zone_id",
+      "population_est",
+      "billed_consumption_liters",
+      "production_volume_liters",
+      "avg_pressure_bar"
+    ],
+    "invalid_dates": 0,
+    "invalid_production_volume_liters": 0,
+    "invalid_billed_consumption_liters": 0,
+    "negative_production_rows": 0,
+    "negative_billed_rows": 0
+  },
+  "weather_daily": {
+    "row_count": 8768,
+    "column_count": 5,
+    "missing_cells": 0,
+    "duplicate_rows": 0,
+    "columns": [
+      "date",
+      "zone_id",
+      "temp_c",
+      "rainfall_mm",
+      "humidity_pct"
+    ]
+  },
+  "billing_monthly": {
+    "row_count": 288,
+    "column_count": 6,
+    "missing_cells": 0,
+    "duplicate_rows": 0,
+    "columns": [
+      "zone_id",
+      "billing_month",
+      "billed_kilo_liters",
+      "revenue_expected",
+      "collection_rate",
+      "revenue_collected"
+    ]
+  },
+  "zones": {
+    "row_count": 8,
+    "column_count": 6,
+    "missing_cells": 0,
+    "duplicate_rows": 0,
+    "columns": [
+      "zone_id",
+      "zone_name",
+      "zone_type",
+      "population",
+      "num_households",
+      "area_sq_km"
+    ]
+  },
+  "pipe_network": {
+    "row_count": 77,
+    "column_count": 7,
+    "missing_cells": 0,
+    "duplicate_rows": 0,
+    "columns": [
+      "pipe_id",
+      "zone_id",
+      "length_km",
+      "diameter_mm",
+      "material",
+      "install_year",
+      "avg_pressure_bar"
+    ]
+  },
+  "leakage_incidents": {
+    "row_count": 24,
+    "column_count": 7,
+    "missing_cells": 0,
+    "duplicate_rows": 0,
+    "columns": [
+      "incident_id",
+      "zone_id",
+      "pipe_id",
+      "reported_date",
+      "resolved_date",
+      "severity",
+      "estimated_volume_lost_liters"
+    ]
+  },
+  "reservoirs": {
+    "row_count": 8,
+    "column_count": 5,
+    "missing_cells": 0,
+    "duplicate_rows": 0,
+    "columns": [
+      "reservoir_id",
+      "zone_id",
+      "reservoir_name",
+      "capacity_ml",
+      "commissioned_year"
+    ]
+  }
+}
