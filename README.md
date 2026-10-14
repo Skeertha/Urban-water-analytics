@@ -131,3 +131,34 @@ Key SQL analysis includes:
 - Zone-level SQL analysis combines leakage indicators with revenue-risk data to support operational prioritization.
 
 The complete SQL analysis is available in `SQL/urban_water_analysis.sql`.
+
+## ETL Pipeline and Automated Data Quality Testing
+
+### Overview
+Built a Python-based ETL pipeline to load urban water consumption, billing, weather, zone, pipe network, leakage incident, and reservoir datasets; generate a daily citywide summary; and store data in SQLite for validation and analysis.
+
+### Technologies
+- Python and pandas
+- SQL and SQLite
+- CSV data processing
+- Automated testing with Python `unittest`
+
+### Validation Results
+- Processed 7 source CSV files containing 36,701 rows in total.
+- Generated 1,096 daily summary records.
+- Created a JSON data-quality report and a SQLite database.
+- Validated required columns, duplicate daily dates, NRW calculation consistency, quality-report missing-value results, and database row counts.
+- Executed 6 automated ETL tests successfully.
+
+### How to Run
+Run the ETL pipeline:
+
+```powershell
+python .\python\05_etl_quality_pipeline.py
+```
+
+Run the automated tests:
+
+```powershell
+python -m unittest discover -s tests -p "test*.py" -v
+```
