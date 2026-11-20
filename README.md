@@ -28,6 +28,8 @@ A Java-based REST API for analyzing urban water supply data across eight service
 - Structured JSON error responses
 - Automated API integration tests
 - GitHub Actions CI workflow
+- Request input validation using Jakarta Bean Validation
+- HTTP 400 responses for invalid API request data
 
 ## REST API Endpoints
 
@@ -133,3 +135,23 @@ Urban-water-analytics/
 
 - Java 21
 - Apache Maven 3.10.1 or compatible version
+
+## Testing
+
+The project includes seven automated API integration tests using JUnit 5, Spring Boot Test, and MockMvc.
+
+Test coverage includes:
+
+- Water analytics API responses
+- Creating, retrieving, updating, and deleting water consumption records
+- Handling requests for non-existent records with HTTP 404 responses
+- Rejecting blank date and zone ID values
+- Rejecting negative population values with HTTP 400 responses
+
+Run the tests from the `java-app` directory:
+
+```bash
+mvn clean verify
+```
+
+The test suite completed successfully with **7 tests, 0 failures, and 0 errors** in the local environment.
