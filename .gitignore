@@ -1,6 +1,9 @@
-__pycache__/
-*.pyc
-.ipynb_checkpoints/
+﻿target/
+*.class
+*.jar
+*.war
+.idea/
+.vscode/
+*.iml
 .DS_Store
-*.pbix.bak
-.venv/
+Thumbs.db

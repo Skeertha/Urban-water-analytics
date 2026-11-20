@@ -1,181 +1,68 @@
-# 🚰 Urban Water Supply Intelligence & Demand Analytics
+﻿# Urban Water Analytics REST API
 
-An end-to-end data project that combines **SQL + Python + Power BI + predictive
-analytics** to solve a real-world municipal utility problem: how much water a
-city will need, where it's being lost, and which zones are most at financial
-and infrastructure risk.
+A Java-based REST API that analyzes urban water supply data across eight service zones. The application processes CSV datasets and calculates water production, billed consumption and Non-Revenue Water (NRW).
 
-Built around a synthetic but realistic dataset spanning **8 service zones,
-3 years of daily data, weather, billing, pipe network, and leak incidents.**
+## Technology Stack
 
-## Business problem
+- Java 21
+- Spring Boot 3.5.7
+- Spring Web
+- Maven 3.10.1
+- JUnit 5
+- MockMvc
+- CSV file processing
 
-Urban water utilities lose 10–35% of the water they produce before it's ever
-billed — this is called **Non-Revenue Water (NRW)**. On top of that, planners
-need to forecast demand for reservoir and pumping capacity, and finance teams
-need visibility into revenue collection gaps. This project builds the
-analytics stack a water utility's data team would actually build to tackle
-all three problems together.
+## Features
 
-## What's inside
-
-| Question | How it's answered |
-|---|---|
-| How much water are we losing, and where? | SQL NRW% queries + Isolation Forest anomaly detection on production-vs-billed gaps |
-| What will demand look like next quarter? | Gradient Boosting time-series forecast (~1.5% MAPE) using weather + calendar + lag features |
-| Which pipes/zones are highest risk? | SQL queries joining pipe age/material with leak history |
-| Are we collecting the revenue we're owed? | Billing/collection-rate analysis by zone |
-| How do I see all this at a glance? | Power BI dashboard spec with ready-to-paste DAX measures |
-
-## Project structure
-
-```
-urban-water-analytics/
-├── data/
-│   ├── raw/                     # generated CSV source data (8 zones × 3 years)
-│   └── processed/               # model outputs, KPI summaries
-├── sql/
-│   ├── 01_schema.sql            # relational schema (PostgreSQL)
-│   └── 02_analysis_queries.sql  # NRW%, per-capita demand, YoY growth, revenue risk, etc.
-├── python/
-│   ├── 01_generate_data.py            # synthetic data generator
-│   ├── 02_eda_and_visualization.py    # EDA, seasonality, weather correlation
-│   ├── 03_demand_forecasting_model.py # Gradient Boosting demand forecast
-│   └── 04_leak_anomaly_detection.py   # Isolation Forest NRW anomaly detection
-├── powerbi/
-│   └── PowerBI_Guide.md         # data model, DAX measures, page-by-page dashboard spec
-├── outputs/figures/             # generated charts (PNG)
-├── docs/
-│   └── architecture.md          # data flow diagram & design rationale
-├── requirements.txt
-└── README.md
-```
-
-## Quickstart
-
-```bash
-git clone https://github.com/<your-username>/urban-water-analytics.git
-cd urban-water-analytics
-pip install -r requirements.txt
-
-# 1. Generate the dataset
-python python/01_generate_data.py
-
-# 2. Run exploratory analysis (saves charts to outputs/figures)
-python python/02_eda_and_visualization.py
-
-# 3. Train & evaluate the demand forecasting model
-python python/03_demand_forecasting_model.py
-
-# 4. Run leak / NRW anomaly detection
-python python/04_leak_anomaly_detection.py
-```
-
-To use the SQL layer, load `data/raw/*.csv` into a PostgreSQL database using
-`sql/01_schema.sql`, then run the queries in `sql/02_analysis_queries.sql`.
-
-To build the Power BI dashboard, follow `powerbi/PowerBI_Guide.md` — it lists
-exactly which CSVs to import and the DAX measures to paste in.
-
-## Key results (on the generated sample data)
-
-- **Demand forecast accuracy:** ~1.5% MAPE on a 90-day held-out test period, using a Gradient Boosting model with weather, calendar, and lag features.
-- **Leak detection:** Isolation Forest flags NRW anomalies with ~95% precision and ~76% recall against injected leak events, run independently per zone so small zones aren't masked by citywide averages.
-- **NRW baseline:** ~10–16% system-wide losses plus zone-specific leak spikes, matching typical real-world utility ranges.
-
-## Dataset
-
-Since real SCADA/meter/billing data from a utility isn't publicly available,
-`python/01_generate_data.py` generates a realistic synthetic dataset with:
-
-- Seasonal + weekly demand patterns (higher in summer, weekday/weekend splits by zone type)
-- Weather-driven variation (temperature, rainfall, humidity)
-- Randomly injected leak events with realistic duration/severity
-- Population-driven demand growth trend over 3 years
-- Billing collection rates with realistic variance
-
-This makes the project fully reproducible and safe to publish on GitHub —
-no confidential utility data required — while still exercising every skill
-(SQL modeling, EDA, forecasting, anomaly detection, dashboarding) that a real
-deployment would need.
-
-## Tech stack
-
-`Python (pandas, numpy, scikit-learn, matplotlib, seaborn)` · `SQL (PostgreSQL)` · `Power BI (DAX)`
-
-## License
-
-MIT — free to use, adapt, and extend for your own portfolio or coursework.
-
-## SQL Analysis
-
-MySQL was used to perform business-focused analysis on citywide water and zone-level datasets.
-
-Key SQL analysis includes:
-
-- Overall production, billing, and NRW KPI analysis
-- Daily and monthly NRW trend analysis
-- Production-to-bill gap analysis
-- Zone-level leakage analysis
-- Revenue-at-risk analysis
-- Risk classification using CASE WHEN
-- JOIN analysis between leakage and revenue-risk datasets
-- CTE-based zone analysis
-- Window functions using RANK()
-
-### Key SQL Insights
-
-- November 2023 was identified as the strongest NRW anomaly period, with an average NRW of approximately 13.85%.
-- All 17 days classified as high NRW (NRW >= 14%) occurred in November 2023.
-- July 2025 recorded the highest monthly production-to-bill gap at 224.69.
-- Zone-level SQL analysis combines leakage indicators with revenue-risk data to support operational prioritization.
-
-The complete SQL analysis is available in `SQL/urban_water_analysis.sql`.
-
-## ETL Pipeline and Automated Data Quality Testing
-
-### Overview
-Built a Python-based ETL pipeline to load urban water consumption, billing, weather, zone, pipe network, leakage incident, and reservoir datasets; generate a daily citywide summary; and store data in SQLite for validation and analysis.
-
-### Technologies
-- Python and pandas
-- SQL and SQLite
+- REST API development using Spring Boot
+- Application health monitoring
+- Water production and billed consumption analysis
+- Non-Revenue Water (NRW) calculation
+- Zone-level analytics across eight service zones
 - CSV data processing
-- Automated testing with Python `unittest`
+- Automated API testing
 
-### Validation Results
-- Processed 7 source CSV files containing 36,701 rows in total.
-- Generated 1,096 daily summary records.
-- Created a JSON data-quality report and a SQLite database.
-- Validated required columns, duplicate daily dates, NRW calculation consistency, quality-report missing-value results, and database row counts.
-- Executed 6 automated ETL tests successfully.
+## REST API Endpoints
 
-### How to Run
-Run the ETL pipeline:
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/health` | Checks application health |
+| GET | `/api/water/summary` | Returns overall water analytics |
+| GET | `/api/water/zones` | Returns analytics for all eight zones |
 
-```powershell
-python .\python\05_etl_quality_pipeline.py
-```
+## Project Results
 
-Run the automated tests:
+The API processes 8,768 daily consumption records across eight zones.
 
-```powershell
-python -m unittest discover -s tests -p "test*.py" -v
-```
-## NRW hypothesis analysis and forecasting
+| Metric | Result |
+|---|---:|
+| Daily records | 8,768 |
+| Water production | 45,957,213,436 liters |
+| Billed consumption | 40,703,346,640 liters |
+| Non-Revenue Water | 5,253,866,796 liters |
+| NRW percentage | 11.43% |
+| Records per zone | 1,096 |
 
-### High-NRW episode
+## Project Structure
 
-Using 14% as a descriptive threshold, 17 high-NRW days occurred consecutively from 12–28 November 2023. Average NRW during this episode was 15.691%, compared with 11.351% on the other 1,079 days (difference: 4.339 percentage points). This indicates a concentrated episode, but does not establish its cause or formal statistical significance.
-
-### Forecast model evaluation
-
-The final 214 days (1 June–31 December 2025) were held out for chronological evaluation.
-
-| Model | MAE (percentage points) | RMSE (percentage points) |
-|---|---:|---:|
-| Previous-day baseline | 0.0988 | 0.3372 |
-| Linear Regression | 0.1186 | 0.3275 |
-| Random Forest | 0.1583 | 0.3974 |
-
-The previous-day baseline had the lowest MAE, while Linear Regression had the lowest RMSE. Machine learning did not beat the baseline on MAE. The chart can be reproduced by running `python python\07_plot_nrw_forecast.py` after `results/nrw_forecast_predictions.csv` exists.
+```text
+urban-water-analytics/
+├── java-app/
+│   ├── pom.xml
+│   └── src/
+│       ├── main/
+│       │   └── java/com/urbanwater/
+│       │       ├── UrbanWaterApplication.java
+│       │       ├── controller/
+│       │       │   ├── HealthController.java
+│       │       │   └── WaterAnalyticsController.java
+│       │       └── service/
+│       │           └── WaterAnalyticsService.java
+│       └── test/
+│           └── java/com/urbanwater/
+│               └── WaterAnalyticsApiTest.java
+├── data/
+│   └── raw/
+│       ├── consumption_daily.csv
+│       └── zones.csv
+└── README.md
