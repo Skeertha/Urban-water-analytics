@@ -12,14 +12,18 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
           cache: maven
+
+      - name: Create SQLite data directory
+        working-directory: java-app
+        run: mkdir -p data
 
       - name: Run tests
         working-directory: java-app
