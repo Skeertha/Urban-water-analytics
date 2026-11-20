@@ -1,68 +1,135 @@
 ﻿# Urban Water Analytics REST API
 
-A Java-based REST API that analyzes urban water supply data across eight service zones. The application processes CSV datasets and calculates water production, billed consumption and Non-Revenue Water (NRW).
+A Java-based REST API for analyzing urban water supply data across eight service zones. The application provides water consumption analytics, Non-Revenue Water (NRW) calculations, and CRUD operations backed by SQLite.
 
 ## Technology Stack
 
 - Java 21
 - Spring Boot 3.5.7
 - Spring Web
-- Maven 3.10.1
+- Spring JDBC
+- SQLite
+- Maven
 - JUnit 5
+- Spring Boot Test
 - MockMvc
-- CSV file processing
+- Jackson
 
 ## Features
 
-- REST API development using Spring Boot
-- Application health monitoring
-- Water production and billed consumption analysis
-- Non-Revenue Water (NRW) calculation
+- Water production and billed consumption analytics
+- Non-Revenue Water (NRW) calculations
 - Zone-level analytics across eight service zones
-- CSV data processing
-- Automated API testing
+- REST API health endpoint
+- Water consumption record management
+- Create, read, update, and delete operations
+- SQLite database persistence
+- Centralized exception handling
+- Structured JSON error responses
+- Automated API integration tests
+- GitHub Actions CI workflow
 
 ## REST API Endpoints
 
-| Method | Endpoint | Description |
+| HTTP Method | Endpoint | Description |
 |---|---|---|
-| GET | `/api/health` | Checks application health |
-| GET | `/api/water/summary` | Returns overall water analytics |
-| GET | `/api/water/zones` | Returns analytics for all eight zones |
+| GET | `/api/health` | Check application health |
+| GET | `/api/water/summary` | Retrieve overall water analytics |
+| GET | `/api/water/zones` | Retrieve zone-level analytics |
+| POST | `/api/water/records` | Create a consumption record |
+| GET | `/api/water/records` | Retrieve all records |
+| GET | `/api/water/records/{id}` | Retrieve a record by ID |
+| PUT | `/api/water/records/{id}` | Update a record |
+| DELETE | `/api/water/records/{id}` | Delete a record |
 
-## Project Results
+## Sample API Request
 
-The API processes 8,768 daily consumption records across eight zones.
+**POST** `/api/water/records`
+
+```json
+{
+  "date": "2023-01-01",
+  "zoneId": "Z01",
+  "populationEst": 48000,
+  "billedConsumptionLiters": 4532180,
+  "productionVolumeLiters": 5085205,
+  "avgPressureBar": 3.47
+}
+```
+
+## Error Handling
+
+The application uses a custom `ResourceNotFoundException` and centralized exception handling through `@RestControllerAdvice`.
+
+Example: requesting a record that does not exist returns HTTP 404.
+
+```json
+{
+  "status": 404,
+  "error": "Not Found",
+  "message": "Water consumption record not found: -1"
+}
+```
+
+## Project Analytics
+
+The analytics API processes 8,768 daily consumption records across eight service zones.
 
 | Metric | Result |
 |---|---:|
-| Daily records | 8,768 |
+| Daily consumption records | 8,768 |
 | Water production | 45,957,213,436 liters |
 | Billed consumption | 40,703,346,640 liters |
 | Non-Revenue Water | 5,253,866,796 liters |
 | NRW percentage | 11.43% |
 | Records per zone | 1,096 |
 
+## Application Architecture
+
+The application follows a layered architecture:
+
+**REST Controller → Service → Repository → SQLite Database**
+
+- **Controller Layer:** Exposes REST endpoints and handles HTTP requests.
+- **Service Layer:** Implements analytics and business logic.
+- **Repository Layer:** Performs database operations using Spring JDBC and `JdbcTemplate`.
+- **Model Layer:** Represents water consumption records.
+- **Exception Layer:** Provides centralized API error handling.
+
 ## Project Structure
 
 ```text
-urban-water-analytics/
-├── java-app/
-│   ├── pom.xml
-│   └── src/
-│       ├── main/
-│       │   └── java/com/urbanwater/
-│       │       ├── UrbanWaterApplication.java
-│       │       ├── controller/
-│       │       │   ├── HealthController.java
-│       │       │   └── WaterAnalyticsController.java
-│       │       └── service/
-│       │           └── WaterAnalyticsService.java
-│       └── test/
-│           └── java/com/urbanwater/
-│               └── WaterAnalyticsApiTest.java
+Urban-water-analytics/
+├── .github/
+│   └── workflows/
+│       └── java-ci.yml
 ├── data/
 │   └── raw/
 │       ├── consumption_daily.csv
 │       └── zones.csv
+├── java-app/
+│   ├── pom.xml
+│   └── src/
+│       ├── main/
+│       │   ├── java/com/urbanwater/
+│       │   │   ├── UrbanWaterApplication.java
+│       │   │   ├── controller/
+│       │   │   ├── exception/
+│       │   │   ├── model/
+│       │   │   ├── repository/
+│       │   │   └── service/
+│       │   └── resources/
+│       │       ├── application.properties
+│       │       └── schema.sql
+│       └── test/java/com/urbanwater/
+│           ├── WaterAnalyticsApiTest.java
+│           └── WaterConsumptionCrudTest.java
 └── README.md
+```
+
+## Run Locally
+
+### Prerequisites
+
+- Java 21
+- Apache Maven 3.10.1 or compatible version
