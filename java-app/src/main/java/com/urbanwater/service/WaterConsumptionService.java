@@ -1,10 +1,9 @@
 package com.urbanwater.service;
 
+import com.urbanwater.exception.ResourceNotFoundException;
 import com.urbanwater.model.WaterConsumption;
 import com.urbanwater.repository.WaterConsumptionRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -27,8 +26,7 @@ public class WaterConsumptionService {
 
     public WaterConsumption findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Water consumption record not found: " + id
                 ));
     }
@@ -37,8 +35,7 @@ public class WaterConsumptionService {
         boolean updated = repository.update(id, record);
 
         if (!updated) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
+            throw new ResourceNotFoundException(
                     "Water consumption record not found: " + id
             );
         }
@@ -50,8 +47,7 @@ public class WaterConsumptionService {
         boolean deleted = repository.delete(id);
 
         if (!deleted) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
+            throw new ResourceNotFoundException(
                     "Water consumption record not found: " + id
             );
         }

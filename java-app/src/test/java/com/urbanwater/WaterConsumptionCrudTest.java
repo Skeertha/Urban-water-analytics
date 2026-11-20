@@ -94,8 +94,12 @@ class WaterConsumptionCrudTest {
     }
 
     @Test
-    void shouldReturnNotFoundForMissingRecord() throws Exception {
+    void shouldReturnStructuredErrorForMissingRecord() throws Exception {
         mockMvc.perform(get("/api/water/records/-1"))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Not Found"))
+                .andExpect(jsonPath("$.message")
+                        .value("Water consumption record not found: -1"));
     }
 }
