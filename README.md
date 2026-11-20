@@ -155,3 +155,20 @@ mvn clean verify
 ```
 
 The test suite completed successfully with **7 tests, 0 failures, and 0 errors** in the local environment.
+
+## AI-Assisted Engineering
+
+AI assistance was used as a development support tool throughout this project.
+
+Areas where AI assistance supported the engineering workflow:
+
+- Understanding Java OOP concepts and Spring Boot application structure
+- Supporting implementation of REST controllers, service classes, and JDBC repository operations
+- Troubleshooting SQLite database connectivity and API errors
+- Improving input validation and centralized exception handling
+- Supporting the creation and review of JUnit integration tests
+- Reviewing README documentation and GitHub Actions CI configuration
+
+All generated or suggested changes were reviewed, executed, and tested in the local development environment before being committed and pushed to GitHub.
+
+AI assistance supported development and learning; it did not replace implementation verification or test execution.
