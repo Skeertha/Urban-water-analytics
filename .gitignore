@@ -7,3 +7,8 @@
 *.iml
 .DS_Store
 Thumbs.db
+
+# SQLite database files
+java-app/data/*.db
+java-app/data/*.db-shm
+java-app/data/*.db-wal
