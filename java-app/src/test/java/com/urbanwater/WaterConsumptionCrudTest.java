@@ -1,3 +1,4 @@
+
 package com.urbanwater;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -101,5 +102,72 @@ class WaterConsumptionCrudTest {
                 .andExpect(jsonPath("$.error").value("Not Found"))
                 .andExpect(jsonPath("$.message")
                         .value("Water consumption record not found: -1"));
+    }
+
+    @Test
+    void shouldRejectBlankDate() throws Exception {
+        String record = """
+                {
+                    "date": "",
+                    "zoneId": "Z01",
+                    "populationEst": 48000,
+                    "billedConsumptionLiters": 4532180,
+                    "productionVolumeLiters": 5085205,
+                    "avgPressureBar": 3.47
+                }
+                """;
+
+        mockMvc.perform(post("/api/water/records")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(record))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("Bad Request"))
+                .andExpect(jsonPath("$.details[0]")
+                        .value("date: Date is required"));
+    }
+
+    @Test
+    void shouldRejectBlankZoneId() throws Exception {
+        String record = """
+                {
+                    "date": "2023-01-01",
+                    "zoneId": "",
+                    "populationEst": 48000,
+                    "billedConsumptionLiters": 4532180,
+                    "productionVolumeLiters": 5085205,
+                    "avgPressureBar": 3.47
+                }
+                """;
+
+        mockMvc.perform(post("/api/water/records")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(record))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.details[0]")
+                        .value("zoneId: Zone ID is required"));
+    }
+
+    @Test
+    void shouldRejectNegativePopulation() throws Exception {
+        String record = """
+                {
+                    "date": "2023-01-01",
+                    "zoneId": "Z01",
+                    "populationEst": -10,
+                    "billedConsumptionLiters": 4532180,
+                    "productionVolumeLiters": 5085205,
+                    "avgPressureBar": 3.47
+                }
+                """;
+
+        mockMvc.perform(post("/api/water/records")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(record))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.details[0]")
+                        .value("populationEst: Population cannot be negative"));
     }
 }

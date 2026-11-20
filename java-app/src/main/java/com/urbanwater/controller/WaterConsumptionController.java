@@ -2,6 +2,7 @@ package com.urbanwater.controller;
 
 import com.urbanwater.model.WaterConsumption;
 import com.urbanwater.service.WaterConsumptionService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class WaterConsumptionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WaterConsumption create(@RequestBody WaterConsumption record) {
+    public WaterConsumption create(@Valid @RequestBody WaterConsumption record) {
         return service.create(record);
     }
 
@@ -36,7 +37,7 @@ public class WaterConsumptionController {
     @PutMapping("/{id}")
     public WaterConsumption update(
             @PathVariable Long id,
-            @RequestBody WaterConsumption record
+            @Valid @RequestBody WaterConsumption record
     ) {
         return service.update(id, record);
     }
