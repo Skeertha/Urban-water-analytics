@@ -12,3 +12,10 @@ Thumbs.db
 java-app/data/*.db
 java-app/data/*.db-shm
 java-app/data/*.db-wal
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/

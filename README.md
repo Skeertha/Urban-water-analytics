@@ -1,9 +1,15 @@
-﻿# Urban Water Analytics REST API
+﻿# Urban Water Analytics
 
-A Java-based REST API for analyzing urban water supply data across eight service zones. The application provides water consumption analytics, Non-Revenue Water (NRW) calculations, and CRUD operations backed by SQLite.
+An urban water analytics project combining a **Java Spring Boot REST API** with **Python-based data analytics and data-quality validation**. The project analyzes water consumption, production, billing, infrastructure, weather, and leakage data across eight service zones.
+
+## Project Components
+
+1. **Java REST API:** Water analytics, NRW calculations, and CRUD operations backed by SQLite.
+2. **Python Analytics:** Exploratory data analysis, demand forecasting, leak anomaly detection, and ETL data-quality validation.
 
 ## Technology Stack
 
+### Java
 - Java 21
 - Spring Boot 3.5.7
 - Spring Web
@@ -15,8 +21,18 @@ A Java-based REST API for analyzing urban water supply data across eight service
 - MockMvc
 - Jackson
 
+### Python
+- Python
+- Pandas
+- NumPy
+- Matplotlib
+- Seaborn
+- Scikit-learn
+- unittest
+
 ## Features
 
+### Java REST API
 - Water production and billed consumption analytics
 - Non-Revenue Water (NRW) calculations
 - Zone-level analytics across eight service zones
@@ -26,10 +42,67 @@ A Java-based REST API for analyzing urban water supply data across eight service
 - SQLite database persistence
 - Centralized exception handling
 - Structured JSON error responses
-- Automated API integration tests
-- GitHub Actions CI workflow
-- Request input validation using Jakarta Bean Validation
+- Request validation using Jakarta Bean Validation
 - HTTP 400 responses for invalid API request data
+- GitHub Actions CI workflow
+- Automated API integration tests
+
+### Python Analytics
+- Exploratory data analysis and visualization
+- Water demand forecasting
+- Leak anomaly detection
+- ETL data-quality validation across seven CSV datasets
+- Missing and blank value detection
+- Duplicate business-key validation
+- Numeric range and data-type validation
+- Foreign-key relationship checks
+- Date and business-rule validation
+- JSON quality report and CSV issue report generation
+- Automated unit tests for data-quality validation
+
+## Python Analytics and ETL Pipeline
+
+The Python workflow processes seven datasets:
+
+| Dataset | Records |
+|---|---:|
+| zones | 8 |
+| reservoirs | 8 |
+| pipe_network | 77 |
+| weather_daily | 8,768 |
+| consumption_daily | 8,768 |
+| leakage_incidents | 24 |
+| billing_monthly | 288 |
+| **Total** | **17,941** |
+
+### Data-quality validation results
+
+The ETL pipeline validates the datasets for completeness, uniqueness, consistency, relationships, valid dates, numeric constraints, and business rules.
+
+| Validation metric | Result |
+|---|---:|
+| Datasets checked | 7 |
+| Total records checked | 17,941 |
+| Missing values detected | 0 |
+| Duplicate business-key rows | 0 |
+| Total validation issues | 0 |
+| Overall pipeline status | PASS |
+
+**Generated reports:**
+- `data/processed/etl_quality_report.json`
+- `data/processed/data_quality_issues.csv`
+
+The pipeline reports validation results without modifying the original source CSV files.
+
+## Python Scripts
+
+| Script | Purpose |
+|---|---|
+| `01_generate_data.py` | Generate project datasets |
+| `02_eda_and_visualization.py` | Exploratory data analysis and visualization |
+| `03_demand_forecasting_model.py` | Water demand forecasting |
+| `04_leak_anomaly_detection.py` | Leak anomaly detection |
+| `05_data_quality_pipeline.py` | ETL data-quality validation |
 
 ## REST API Endpoints
 
@@ -61,7 +134,7 @@ A Java-based REST API for analyzing urban water supply data across eight service
 
 ## Error Handling
 
-The application uses a custom `ResourceNotFoundException` and centralized exception handling through `@RestControllerAdvice`.
+The Java application uses a custom `ResourceNotFoundException` and centralized exception handling through `@RestControllerAdvice`.
 
 Example: requesting a record that does not exist returns HTTP 404.
 
@@ -75,7 +148,7 @@ Example: requesting a record that does not exist returns HTTP 404.
 
 ## Project Analytics
 
-The analytics API processes 8,768 daily consumption records across eight service zones.
+The Java analytics API processes 8,768 daily consumption records across eight service zones.
 
 | Metric | Result |
 |---|---:|
@@ -88,6 +161,8 @@ The analytics API processes 8,768 daily consumption records across eight service
 
 ## Application Architecture
 
+### Java application
+
 The application follows a layered architecture:
 
 **REST Controller → Service → Repository → SQLite Database**
@@ -98,6 +173,12 @@ The application follows a layered architecture:
 - **Model Layer:** Represents water consumption records.
 - **Exception Layer:** Provides centralized API error handling.
 
+### Python data pipeline
+
+**CSV Datasets → Pandas Data Processing → Data-quality Validation → JSON and CSV Reports**
+
+The pipeline checks data quality before reporting validation results.
+
 ## Project Structure
 
 ```text
@@ -106,9 +187,17 @@ Urban-water-analytics/
 │   └── workflows/
 │       └── java-ci.yml
 ├── data/
-│   └── raw/
-│       ├── consumption_daily.csv
-│       └── zones.csv
+│   ├── raw/
+│   │   ├── billing_monthly.csv
+│   │   ├── consumption_daily.csv
+│   │   ├── leakage_incidents.csv
+│   │   ├── pipe_network.csv
+│   │   ├── reservoirs.csv
+│   │   ├── weather_daily.csv
+│   │   └── zones.csv
+│   └── processed/
+│       ├── etl_quality_report.json
+│       └── data_quality_issues.csv
 ├── java-app/
 │   ├── pom.xml
 │   └── src/
@@ -126,6 +215,18 @@ Urban-water-analytics/
 │       └── test/java/com/urbanwater/
 │           ├── WaterAnalyticsApiTest.java
 │           └── WaterConsumptionCrudTest.java
+├── python/
+│   ├── 01_generate_data.py
+│   ├── 02_eda_and_visualization.py
+│   ├── 03_demand_forecasting_model.py
+│   ├── 04_leak_anomaly_detection.py
+│   ├── 05_data_quality_pipeline.py
+│   └── tests/
+│       ├── __init__.py
+│       ├── test_data_quality_edge_cases.py
+│       └── test_data_quality_pipeline.py
+├── requirements.txt
+├── .gitignore
 └── README.md
 ```
 
@@ -135,10 +236,64 @@ Urban-water-analytics/
 
 - Java 21
 - Apache Maven 3.10.1 or compatible version
+- Python 3
+- pip
+
+### Run Python ETL Pipeline
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the data-quality pipeline from the project root:
+
+```bash
+python python/05_data_quality_pipeline.py
+```
+
+### Run Python Unit Tests
+
+```bash
+python -m unittest discover -s python -p "test_*.py" -v
+```
+
+### Run Java Application
+
+Navigate to the Java application directory:
+
+```bash
+cd java-app
+```
+
+Run the application using Maven:
+
+```bash
+mvn spring-boot:run
+```
 
 ## Testing
 
-The project includes seven automated API integration tests using JUnit 5, Spring Boot Test, and MockMvc.
+### Python tests
+
+The Python data-quality pipeline includes nine automated unit tests covering:
+
+- Numeric range validation
+- Foreign-key validation
+- Date-order validation
+- Business-rule validation
+- Duplicate business-key detection
+- Missing-file detection
+- Missing-column detection
+- Blank-value detection
+- Invalid-numeric detection
+
+**Verified result: 9 tests passed, 0 failures.**
+
+### Java tests
+
+The Java application includes seven automated API integration tests using JUnit 5, Spring Boot Test, and MockMvc.
 
 Test coverage includes:
 
@@ -154,7 +309,7 @@ Run the tests from the `java-app` directory:
 mvn clean verify
 ```
 
-The test suite completed successfully with **7 tests, 0 failures, and 0 errors** in the local environment.
+**Previously verified result: 7 tests passed, 0 failures, and 0 errors.**
 
 ## AI-Assisted Engineering
 
@@ -166,8 +321,9 @@ Areas where AI assistance supported the engineering workflow:
 - Supporting implementation of REST controllers, service classes, and JDBC repository operations
 - Troubleshooting SQLite database connectivity and API errors
 - Improving input validation and centralized exception handling
-- Supporting the creation and review of JUnit integration tests
-- Reviewing README documentation and GitHub Actions CI configuration
+- Supporting Python data-processing and validation workflows
+- Creating and reviewing automated unit and integration tests
+- Reviewing documentation and GitHub Actions CI configuration
 
 All generated or suggested changes were reviewed, executed, and tested in the local development environment before being committed and pushed to GitHub.
 
